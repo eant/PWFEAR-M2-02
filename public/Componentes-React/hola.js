@@ -1,4 +1,3 @@
-import React from 'react'
 class Hola extends React.Component {
 
   render(){
@@ -6,4 +5,3 @@ class Hola extends React.Component {
   }
 
 }
-export default Hola
