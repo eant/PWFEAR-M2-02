@@ -1,4 +1,3 @@
-//let React = require('react')
 import React from 'react'
 class Hola extends React.Component {
 
