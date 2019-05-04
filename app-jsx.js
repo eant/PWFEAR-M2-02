@@ -1,12 +1,6 @@
-let Hola =  class Hola extends React.Component {
-
-  render(){
-      return <div>Hola {this.props.nombre}!!!</div>
-  }
-
-}
+import Hola from "hola"
 
 ReactDOM.render(
-  <Hola nombre="JSX" />,
+  <Hola nombre="Modulo 'Hola' en JSX" />,
   document.querySelector("#app")
 )
