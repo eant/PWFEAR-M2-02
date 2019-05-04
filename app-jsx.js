@@ -1,4 +1,4 @@
-let hola =  class Hola extends React.Component {
+let Hola =  class Hola extends React.Component {
 
   render(){
       return <div>Hola {this.props.nombre}!!!</div>
@@ -7,6 +7,6 @@ let hola =  class Hola extends React.Component {
 }
 
 ReactDOM.render(
-  <hola nombre="JSX" />,
+  <Hola nombre="JSX" />,
   document.querySelector("#app")
 )
