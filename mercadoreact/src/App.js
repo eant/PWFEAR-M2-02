@@ -1,21 +1,30 @@
-import React from 'react';
+import React from 'react'
 
 /* Importar módulos propios */
 import Header from './components/Header'
 import Menu from './components/Menu'
 import Product from './components/Product'
+import Modal from './components/Modal'
 
 /* Importar recursos propios */
 //import './App.css';
-import productos from './productos.json'
+//import productos from './productos.json'
+import Client from './helpers/Client'
+
+const API = new Client()
+/*
+- Ciclo de vida de un componente
+
+1) constructor()        //<-- Setear el "estado" inicial
+2) componentWillMount() //<-- Trabajar con datos Asincronicos (AJAX)
+3) componentDidMount()  //<-- Trabajar con datos Sincronicos (Loops)
+4) render()             //<-- Armar la interfaz grafica (segun el "estado")
+*/
 
 class App extends React.Component {
 
   constructor(){
     super()
-
-    console.log( productos )
-
     this.state = {
       title : "Mercado React v1.1",
       slogan : "Mucho más que JavaScript",
@@ -29,25 +38,73 @@ class App extends React.Component {
         { nombre : "Marcadores Color", precio : 80, stock : 400, categoria : "Librería" }
       ]
       */
-      products : productos
+      products : [],
+      loaded : false
     }
+  }
+  componentWillMount(){
+    /* Datos Asincronicos obtenidos directamente...
+
+    fetch("https://api.myjson.com/bins/fb377").then((response) => {
+      //Capa 1: Convertir los datos...
+      return response.json()
+    }).then((productos) => {
+      //Capa 2: Usar los datos...
+      this.setState({ products : productos, loaded : true })
+    })
+*/
+
+    /* Datos Asincronicos obtenidos mediante un modulo Helper */
+    API.getData("https://api.myjson.com/bins/fb377").then((productos) => {
+      this.setState({ products : productos, loaded : true })
+    })
+  }
+
+  agregarProducto(){
+
+  }
+  editarProducto(){
+    console.log("Editaré el producto #??")
+
+    console.log(this)
+
+    //console.log( this.state.products[13] )
+  }
+  borrarProducto(){
+
+  }
+  buscarProducto(){
+
   }
 
   render(){
     /* Aca se pueden programar cosas que desemboquen en el return */
-    const losProductos = this.state.products.map(
-      (product, index) => <Product item={product} key={index} />
-    )
+    if( !this.state.loaded ){ //<-- Si NO está cargado...
+      return <div>Iniciando App..</div>
+    } else { //<-- Si EFECTIVAMENTE está cargado...
 
-    return (
-      /******* ACÁ VAN TODOS LOS COMPONENTES ********/
-      <div className="App">
-        <Header title={this.state.title} slogan={this.state.slogan} />
-        <Menu links={this.state.products} />
-        <section className="row">{losProductos}</section>
-      </div>
-     /******* ACÁ AFUERA, NADA ********/
-    )
+      const losProductos = this.state.products.map(
+        (product, index) => <Product item={product} key={index} itemID={product.idProducto} onEditarProducto={this.editarProducto} />
+      )
+      return (
+        /******* ACÁ VAN TODOS LOS COMPONENTES ********/
+        <div className="App">
+          <Header title={this.state.title} slogan={this.state.slogan} />
+
+          <button onClick={this.editarProducto.bind(this)}>EDITAR</button>
+
+          <Menu links={this.state.products} />
+          <section className="row">{losProductos}</section>
+          <Modal />
+        </div>
+       /******* ACÁ AFUERA, NADA ********/
+      )
+
+    }
+
+
+
+
   }
 
 }

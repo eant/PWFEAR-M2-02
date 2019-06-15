@@ -3,7 +3,7 @@ import logo from '../assets/logo.svg'
 
 class Header extends React.Component {
   render(){
-    console.log(this.props)
+    //console.log(this.props)
     return (
       /** Inicio del componente Header **/
       <header className="jumbotron jumbotron-fluid text-center py-3 m-0">
