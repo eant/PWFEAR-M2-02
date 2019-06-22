@@ -41,7 +41,9 @@ class App extends React.Component {
       products : [],
       loaded : false
     }
+    this.actualizarEstado = this.actualizarEstado.bind(this)
   }
+
   componentWillMount(){
     /* Datos Asincronicos obtenidos directamente...
 
@@ -55,26 +57,22 @@ class App extends React.Component {
 */
 
     /* Datos Asincronicos obtenidos mediante un modulo Helper */
-    API.getData("https://api.myjson.com/bins/fb377").then((productos) => {
+    API.getData("https://api.myjson.com/bins/dcg2p").then((productos) => {
       this.setState({ products : productos, loaded : true })
     })
   }
 
-  agregarProducto(){
-
-  }
-  editarProducto(){
-    console.log("Editaré el producto #??")
-
-    console.log(this)
-
-    //console.log( this.state.products[13] )
-  }
-  borrarProducto(){
-
-  }
-  buscarProducto(){
-
+  actualizarEstado(theProduct, borrar = false){
+    if(!borrar){ //<-- Si NO hay que "borrar"... entonces "actualizar"
+      this.setState({
+        products : this.state.products.map(
+          oldProduct => oldProduct.idProducto === theProduct.idProducto ? theProduct : oldProduct
+        )
+      })
+    } else { //<-- Si EFECTIVAMENTE hay que "borrar"... entonces "borrar"
+      console.log("Voy a borrar este producto:")
+      console.table(theProduct)
+    }
   }
 
   render(){
@@ -84,17 +82,19 @@ class App extends React.Component {
     } else { //<-- Si EFECTIVAMENTE está cargado...
 
       const losProductos = this.state.products.map(
-        (product, index) => <Product item={product} key={index} itemID={product.idProducto} onEditarProducto={this.editarProducto} />
+        (product, index) => <Product item={product} key={index} onActualizarProducto={this.actualizarEstado} />
       )
       return (
         /******* ACÁ VAN TODOS LOS COMPONENTES ********/
         <div className="App">
           <Header title={this.state.title} slogan={this.state.slogan} />
 
-          <button onClick={this.editarProducto.bind(this)}>EDITAR</button>
+          <button onClick={this.actualizarEstado}>Actualiza Estado</button>
 
           <Menu links={this.state.products} />
-          <section className="row">{losProductos}</section>
+          <section className="container-fluid">
+            <div className="row">{losProductos}</div>
+          </section>
           <Modal />
         </div>
        /******* ACÁ AFUERA, NADA ********/
