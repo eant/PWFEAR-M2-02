@@ -63,19 +63,48 @@ class App extends React.Component {
   }
 
   actualizarEstado(theProduct, borrar = false){
+    //0) Variable común
+    let nuevo = []
+
+    //1) "Desactivar" el render()
+    this.setState({ loaded : false })
+
+    //2) "Actualizar" o "Borrar"
     if(!borrar){ //<-- Si NO hay que "borrar"... entonces "actualizar"
+    /*
       this.setState({
         products : this.state.products.map(
           oldProduct => oldProduct.idProducto === theProduct.idProducto ? theProduct : oldProduct
         )
-      })
+      }, () => { this.setState({ loaded : true }) })
+*/
+      nuevo = this.state.products.map(
+        oldProduct => oldProduct.idProducto === theProduct.idProducto ? theProduct : oldProduct
+      )
+
     } else { //<-- Si EFECTIVAMENTE hay que "borrar"... entonces "borrar"
-      console.log("Voy a borrar este producto:")
-      console.table(theProduct)
+      /*
+      this.setState({
+        products : this.state.products.filter(
+          oldProduct => oldProduct.idProducto !== theProduct.idProducto
+          )
+        }, () => { this.setState({ loaded : true }) })
+*/
+      nuevo = this.state.products.filter(
+        oldProduct => oldProduct.idProducto !== theProduct.idProducto
+      )
     }
+
+    this.setState({ products : nuevo }, () => {
+      window.localStorage.setItem("_products", JSON.stringify(nuevo) ) //<-- Actualizo el LS
+      this.setState({ loaded : true })
+
+    })
   }
 
   render(){
+    console.log("Actualizando render...")
+    console.log( this.state )
     /* Aca se pueden programar cosas que desemboquen en el return */
     if( !this.state.loaded ){ //<-- Si NO está cargado...
       return <div>Iniciando App..</div>
@@ -88,8 +117,6 @@ class App extends React.Component {
         /******* ACÁ VAN TODOS LOS COMPONENTES ********/
         <div className="App">
           <Header title={this.state.title} slogan={this.state.slogan} />
-
-          <button onClick={this.actualizarEstado}>Actualiza Estado</button>
 
           <Menu links={this.state.products} />
           <section className="container-fluid">

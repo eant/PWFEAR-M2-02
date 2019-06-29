@@ -1,5 +1,5 @@
 class Client {
-
+/*
   getData(url){
 
     return fetch(url).then((data) => {
@@ -10,6 +10,25 @@ class Client {
       return json
     })
 
+  }
+*/
+  async getData(url){
+    let data, objects = null
+
+    if( !window.localStorage.getItem("_products") ){
+
+      data = await fetch(url) //<-- Obtener el JSON
+      objects = await data.json() //<-- Convertir a Object
+
+      await window.localStorage.setItem("_products", JSON.stringify(objects) ) //<-- Guardar copia en LS
+
+    } else {
+
+      data = await window.localStorage.getItem("_products") //<-- Obtener el JSON
+      objects = await JSON.parse( data ) //<-- Convertir a Object
+
+    }
+    return objects
   }
 
 }

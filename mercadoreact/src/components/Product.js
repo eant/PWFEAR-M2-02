@@ -55,8 +55,6 @@ class Product extends Component {
       return(
         <article className="col-6 col-md-4 my-2">
 
-          <button onClick={this.props.onActualizarProducto}>Actualiza Estado</button>
-
           <div className={estilo}>
             <img src={this.state.Imagen} className="card-img-top w-100" alt={this.state.Nombre} />
             <div className="card-body">
